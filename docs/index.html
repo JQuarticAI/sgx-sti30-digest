@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SGX STI 30 Daily Digest</title>
+<meta name="description" content="Automated daily executive digest of company announcements from Singapore's Straits Times Index 30 constituents.">
+<style>
+  :root {
+    --sgx-red: #C8102E;
+    --sgx-navy: #1A2B4A;
+    --sgx-navy-2: #243a63;
+    --sgx-light: #F4F6FA;
+    --sgx-border: #DDE3EE;
+    --text: #1A2B4A;
+    --muted: #5A6781;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--sgx-light);
+    color: var(--text);
+    line-height: 1.55;
+  }
+  .container { max-width: 880px; margin: 0 auto; padding: 24px 20px 56px; }
+
+  /* Hero */
+  .hero {
+    background: linear-gradient(135deg, var(--sgx-navy) 0%, #243a63 100%);
+    color: #fff;
+    border-radius: 14px;
+    padding: 36px 32px 32px;
+    box-shadow: 0 6px 20px rgba(26,43,74,0.18);
+  }
+  .hero-top {
+    display: flex; align-items: center; gap: 14px;
+    margin-bottom: 18px;
+  }
+  .logo-badge {
+    background: var(--sgx-red); color: #fff;
+    font-weight: 800; font-size: 14px;
+    padding: 6px 10px; border-radius: 4px;
+    letter-spacing: 0.5px;
+  }
+  .hero h1 {
+    margin: 0;
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+  }
+  .hero .tagline {
+    margin: 8px 0 22px;
+    color: #B6C2D9;
+    font-size: 15px;
+    max-width: 540px;
+  }
+  .cta {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--sgx-red);
+    color: #fff;
+    text-decoration: none;
+    padding: 12px 22px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 15px;
+    transition: transform 0.1s ease, background 0.15s ease;
+  }
+  .cta:hover { background: #B00C26; transform: translateY(-1px); }
+  .cta .arrow { font-size: 18px; line-height: 1; }
+
+  /* Section */
+  .section { margin-top: 36px; }
+  .section h2 {
+    margin: 0 0 14px;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--sgx-navy);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  /* Archive list */
+  .archive-list {
+    background: #fff;
+    border: 1px solid var(--sgx-border);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(26,43,74,0.05);
+  }
+  .archive-item {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--sgx-border);
+    color: var(--text);
+    text-decoration: none;
+    transition: background 0.12s ease;
+  }
+  .archive-item:last-child { border-bottom: none; }
+  .archive-item:hover { background: var(--sgx-light); }
+  .archive-date { font-weight: 600; font-size: 15px; }
+  .archive-meta { color: var(--muted); font-size: 12px; margin-top: 2px; }
+  .archive-left { display: flex; flex-direction: column; }
+  .archive-right {
+    color: var(--sgx-red); font-weight: 600; font-size: 14px;
+    display: flex; align-items: center; gap: 4px;
+  }
+  .latest-badge {
+    background: var(--sgx-red);
+    color: #fff;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 3px;
+    margin-right: 8px;
+    vertical-align: 1px;
+  }
+
+  /* Footer */
+  .footer {
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid var(--sgx-border);
+    color: var(--muted);
+    font-size: 12px;
+    text-align: center;
+    line-height: 1.7;
+  }
+  .footer a { color: var(--sgx-red); text-decoration: none; }
+  .footer a:hover { text-decoration: underline; }
+  .footer .disclaimer { margin-top: 6px; font-size: 11px; }
+
+  @media (max-width: 600px) {
+    .hero { padding: 28px 22px 26px; }
+    .hero h1 { font-size: 22px; }
+    .archive-item { padding: 14px 16px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header class="hero">
+    <div class="hero-top">
+      <span class="logo-badge">SGX</span>
+      <h1>STI 30 Daily Digest</h1>
+    </div>
+    <p class="tagline">Automated executive digest of company announcements from the 30 constituents of Singapore's Straits Times Index. Refreshed daily.</p>
+    <div id="hero-cta-container">
+      <a class="cta" href="./sgx_digest_2026-05-28.html">
+        <span>Read latest digest &mdash; Thursday 28 May 2026</span>
+        <span class="arrow">&rarr;</span>
+      </a>
+    </div>
+  </header>
+
+  <section class="section">
+    <h2>All digests</h2>
+    <div id="archive-container">
+      <div class="archive-list">
+        <a class="archive-item" href="./sgx_digest_2026-05-28.html">
+          <span class="archive-left">
+            <span class="archive-date"><span class="latest-badge">Latest</span>Thursday 28 May 2026</span>
+            <span class="archive-meta">2026-05-28</span>
+          </span>
+          <span class="archive-right">View &rarr;</span>
+        </a>
+        <a class="archive-item" href="./sgx_digest_2026-05-27.html">
+          <span class="archive-left">
+            <span class="archive-date">Wednesday 27 May 2026</span>
+            <span class="archive-meta">2026-05-27</span>
+          </span>
+          <span class="archive-right">View &rarr;</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    Maintained by <strong>JQuarticAI</strong>. Generated using Anthropic's Claude.<br>
+    <a href="https://github.com/JQuarticAI/sgx-sti30-digest" target="_blank" rel="noopener">Source on GitHub</a>
+    &middot;
+    <a href="https://www.sgx.com/securities/company-announcements" target="_blank" rel="noopener">SGX Announcements</a>
+    <div class="disclaimer">Summaries are AI-generated and not financial advice. See the <a href="https://github.com/JQuarticAI/sgx-sti30-digest#disclaimer" target="_blank" rel="noopener">full disclaimer</a> before acting on anything you read here.</div>
+  </footer>
+
+</div>
+
+<script>
+/*
+  Optional enhancement: silently auto-discover any new digests in the docs/ folder
+  via the public GitHub Contents API and merge them into the list above.
+  If the call fails for any reason (no network, rate limit, file:// origin, repo
+  not yet pushed) the hard-coded list above is what visitors see — nothing breaks.
+*/
+(function() {
+  if (window.location.protocol === 'file:') return;
+
+  const REPO_API = 'https://api.github.com/repos/JQuarticAI/sgx-sti30-digest/contents/docs';
+  const DIGEST_REGEX = /^sgx_digest_(\d{4})-(\d{2})-(\d{2})\.html$/;
+  const monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const weekdayNames = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+
+  function formatDate(y, m, d) {
+    const dt = new Date(Date.UTC(+y, +m - 1, +d));
+    return weekdayNames[dt.getUTCDay()] + ' ' + (+d) + ' ' + monthNames[dt.getUTCMonth()] + ' ' + y;
+  }
+
+  function renderHero(latest) {
+    const c = document.getElementById('hero-cta-container');
+    if (!c) return;
+    c.innerHTML =
+      '<a class="cta" href="./' + latest.name + '">' +
+        '<span>Read latest digest &mdash; ' + formatDate(latest.y, latest.m, latest.d) + '</span>' +
+        '<span class="arrow">&rarr;</span>' +
+      '</a>';
+  }
+
+  function renderArchive(digests) {
+    const c = document.getElementById('archive-container');
+    if (!c) return;
+    const items = digests.map(function(d, i) {
+      const badge = i === 0 ? '<span class="latest-badge">Latest</span>' : '';
+      return (
+        '<a class="archive-item" href="./' + d.name + '">' +
+          '<span class="archive-left">' +
+            '<span class="archive-date">' + badge + formatDate(d.y, d.m, d.d) + '</span>' +
+            '<span class="archive-meta">' + d.y + '-' + d.m + '-' + d.d + '</span>' +
+          '</span>' +
+          '<span class="archive-right">View &rarr;</span>' +
+        '</a>'
+      );
+    }).join('');
+    c.innerHTML = '<div class="archive-list">' + items + '</div>';
+  }
+
+  fetch(REPO_API, { headers: { 'Accept': 'application/vnd.github+json' } })
+    .then(function(r) { if (!r.ok) throw 0; return r.json(); })
+    .then(function(items) {
+      const digests = items
+        .filter(function(f) { return f.type === 'file' && DIGEST_REGEX.test(f.name); })
+        .map(function(f) {
+          const m = f.name.match(DIGEST_REGEX);
+          return { name: f.name, y: m[1], m: m[2], d: m[3] };
+        })
+        .sort(function(a, b) { return (b.y + b.m + b.d).localeCompare(a.y + a.m + a.d); });
+      if (digests.length > 0) {
+        renderHero(digests[0]);
+        renderArchive(digests);
+      }
+    })
+    .catch(function() { /* keep static fallback */ });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SGX STI 30 Digest — 2026-05-25</title>
+<style>
+  :root {
+    --sgx-red: #C8102E;
+    --sgx-navy: #1A2B4A;
+    --sgx-light: #F4F6FA;
+    --sgx-border: #DDE3EE;
+    --high-bg: #FDECEF;
+    --high-border: #C8102E;
+    --routine-bg: #E8EFFB;
+    --routine-border: #2C5BB3;
+    --text: #1A2B4A;
+    --muted: #5A6781;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: var(--sgx-light); color: var(--text); line-height: 1.55; }
+  .container { max-width: 1000px; margin: 0 auto; padding: 24px 20px 56px; }
+  .header { background: var(--sgx-navy); color: #fff; border-radius: 12px; padding: 28px 28px 24px; box-shadow: 0 4px 16px rgba(26,43,74,0.12); }
+  .header-top { display: flex; align-items: center; gap: 14px; margin-bottom: 10px; }
+  .logo-badge { background: var(--sgx-red); color: #fff; font-weight: 800; font-size: 14px; padding: 6px 10px; border-radius: 4px; letter-spacing: 0.5px; }
+  .header h1 { margin: 0; font-size: 22px; font-weight: 700; }
+  .header .subtitle { margin-top: 4px; color: #B6C2D9; font-size: 13px; }
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 20px; }
+  .stat { background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; padding: 12px 14px; }
+  .stat .label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.6px; color: #B6C2D9; }
+  .stat .value { margin-top: 4px; font-size: 26px; font-weight: 700; }
+  .coverage { margin-top: 22px; background: #fff; border: 1px solid var(--sgx-border); border-radius: 10px; padding: 14px 18px; }
+  .coverage-label { display: flex; justify-content: space-between; font-size: 13px; color: var(--muted); margin-bottom: 8px; }
+  .coverage-bar { height: 8px; background: var(--sgx-light); border-radius: 4px; overflow: hidden; }
+  .coverage-fill { height: 100%; background: linear-gradient(90deg, var(--sgx-red), #E2415C); }
+  .section { margin-top: 32px; }
+  .section h2 { margin: 0 0 14px; font-size: 17px; font-weight: 700; color: var(--sgx-navy); display: flex; align-items: center; gap: 8px; }
+  .card { background: #fff; border: 1px solid var(--sgx-border); border-radius: 10px; padding: 18px 20px; box-shadow: 0 1px 3px rgba(26,43,74,0.05); }
+  .card + .card { margin-top: 14px; }
+  .card-head { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .initials { width: 38px; height: 38px; flex: 0 0 38px; border-radius: 50%; background: var(--sgx-navy); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px; letter-spacing: 0.5px; }
+  .initials.high { background: var(--sgx-red); }
+  .company-name { font-weight: 700; font-size: 15px; color: var(--sgx-navy); }
+  .company-meta { font-size: 12px; color: var(--muted); }
+  .ticker { display: inline-block; background: var(--sgx-light); color: var(--sgx-navy); padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 700; margin-left: 6px; }
+  .badge { margin-left: auto; padding: 4px 10px; border-radius: 999px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; }
+  .badge.high { background: var(--high-bg); color: var(--high-border); border: 1px solid rgba(200,16,46,0.25); }
+  .badge.routine { background: var(--routine-bg); color: var(--routine-border); border: 1px solid rgba(44,91,179,0.25); }
+  .time { font-size: 12px; color: var(--muted); margin-left: 8px; }
+  .title { margin: 12px 0 6px; font-size: 14px; font-weight: 600; color: var(--text); }
+  .summary { margin: 6px 0 12px; font-size: 14px; color: var(--text); }
+  .key-table { width: 100%; border-collapse: collapse; margin: 10px 0 14px; font-size: 13px; }
+  .key-table th, .key-table td { text-align: left; padding: 6px 10px; border-bottom: 1px solid var(--sgx-border); }
+  .key-table th { color: var(--muted); font-weight: 600; width: 40%; }
+  .view-btn { display: inline-block; background: var(--sgx-navy); color: #fff; padding: 7px 14px; border-radius: 6px; font-size: 12px; font-weight: 600; text-decoration: none; }
+  .view-btn:hover { background: #243a63; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip { background: #fff; border: 1px solid var(--sgx-border); border-radius: 999px; padding: 6px 12px; font-size: 12px; color: var(--muted); white-space: nowrap; }
+  .chip .ticker-inline { color: var(--sgx-navy); font-weight: 700; margin-right: 6px; }
+  .footer { margin-top: 36px; padding-top: 18px; border-top: 1px solid var(--sgx-border); color: var(--muted); font-size: 12px; text-align: center; line-height: 1.6; }
+  .footer a { color: var(--sgx-red); text-decoration: none; }
+  @media (max-width: 640px) { .stats { grid-template-columns: repeat(2, 1fr); } .header h1 { font-size: 18px; } .badge { margin-left: 0; margin-top: 6px; } }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <div class="header-top">
+      <span class="logo-badge">SGX</span>
+      <div>
+        <h1>STI 30 Company Announcements Digest</h1>
+        <div class="subtitle">Monday, 25 May 2026 &middot; Daily executive digest</div>
+      </div>
+    </div>
+    <div class="stats">
+      <div class="stat"><div class="label">STI 30 filings</div><div class="value">20</div></div>
+      <div class="stat"><div class="label">Companies filing</div><div class="value">14</div></div>
+      <div class="stat"><div class="label">High priority</div><div class="value">5</div></div>
+      <div class="stat"><div class="label">Total SGX filings</div><div class="value">142</div></div>
+    </div>
+  </div>
+
+  <div class="coverage">
+    <div class="coverage-label">
+      <span>STI 30 coverage today</span>
+      <span>14 of 30 &mdash; 47%</span>
+    </div>
+    <div class="coverage-bar"><div class="coverage-fill" style="width:47%;"></div></div>
+  </div>
+
+  <!-- HIGH PRIORITY -->
+  <div class="section">
+    <h2>&#128680; High-priority announcements</h2>
+
+    <div class="card">
+      <div class="card-head">
+        <div class="initials high">JM</div>
+        <div>
+          <div class="company-name">Jardine Matheson Holdings<span class="ticker">J36</span></div>
+          <div class="company-meta">M&amp;A / Strategic Acquisition &middot; <span class="time">08:57 SGT</span></div>
+        </div>
+        <span class="badge high">High</span>
+      </div>
+      <div class="title">Acquisition of I-MED Radiology Network from Permira</div>
+      <div class="summary">
+        Jardine Matheson has agreed to acquire 100% of Australia-based I-MED Radiology Network from Permira and other shareholders at an enterprise value of <strong>AUD 3.4 billion (US$2.4 billion)</strong>. I-MED operates 215 diagnostic-imaging clinics across Australia and New Zealand with 500+ radiologists, performing 7 million procedures annually. The deal includes I-MED's minority stake in Harrison.ai (radiology AI). Valuation implies ~11.5x forecast FY2026 adjusted EBITDA for the core business. Funded via cash from recent capital recycling plus debt; expected EPS-neutral in year one, accretive thereafter. Jardines' 2026 underlying EPS and dividend guidance is unchanged. Closing expected later in 2026 subject to regulatory approvals.
+      </div>
+      <table class="key-table">
+        <tr><th>Enterprise value</th><td>AUD 3.4 billion (~US$2.4 billion)</td></tr>
+        <tr><th>Target</th><td>I-MED Radiology Network (Australia/NZ)</td></tr>
+        <tr><th>Implied EBITDA multiple</th><td>~11.5x FY26 forecast (core, ex-Harrison.ai)</td></tr>
+        <tr><th>Funding</th><td>Cash + debt; EPS-neutral year 1, accretive thereafter</td></tr>
+        <tr><th>Expected close</th><td>Later in 2026; regulatory approvals pending</td></tr>
+      </table>
+      <a class="view-btn" href="https://links.sgx.com/1.0.0/corporate-announcements/L8I4MAK92VD3N6FP/3a0410ea8f4422a8afb4fcabac492692ac660e2653535b46254b470c204f84ec" target="_blank" rel="noopener">&#8599; View Filing</a>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <div class="initials high">SATS</div>
+        <div>
+          <div class="company-name">SATS Ltd<span class="ticker">S58</span></div>
+          <div class="company-meta">Financial Results (Full Year FY2026) &middot; <span class="time">19:51 SGT</span></div>
+        </div>
+        <span class="badge high">High</span>
+      </div>
+      <div class="title">Full-Year Results for the year ended 31 March 2026</div>
+      <div class="summary">
+        SATS posted a <strong>record FY2026 revenue of SGD 6.35 billion</strong>, up 9.0%, with PATMI of SGD 285.2 million (+17.0%) and operating profit rising 14.2% to SGD 543.3 million. Margin expanded from 8.2% to 8.6%. Growth was driven by Gateway Services (+10.8% to SGD 4.95B) outpacing IATA cargo benchmarks; Food Solutions +2.9%. Group net cash from operations rose to SGD 1.03B (from SGD 891M). The board declared a <strong>final dividend of 5.0 cents</strong> (vs 3.5 cents prior year), bringing full-year dividend to 7.0 cents (vs 5.0). Outlook flags Middle East conflict and tariff pressure as near-term cargo headwinds, offset by network diversification (225+ stations in 27 countries) and AI/technology investment.
+      </div>
+      <table class="key-table">
+        <tr><th>Revenue</th><td>SGD 6.35B (FY25: 5.82B) &mdash; +9.0%</td></tr>
+        <tr><th>Operating profit</th><td>SGD 543.3M &mdash; +14.2%</td></tr>
+        <tr><th>PATMI</th><td>SGD 285.2M &mdash; +17.0%</td></tr>
+        <tr><th>Basic EPS</th><td>19.2 cents (FY25: 16.4)</td></tr>
+        <tr><th>Final dividend</th><td>5.0 cents (FY25: 3.5)</td></tr>
+        <tr><th>Net cash from operations</th><td>SGD 1.03B (FY25: 891M)</td></tr>
+      </table>
+      <a class="view-btn" href="https://links.sgx.com/1.0.0/corporate-announcements/TRLKR83JYXFAAP6C/94d821cb922ac40ac9a0926f3982a0e596da85c773907e9212504b99c8ccace0" target="_blank" rel="noopener">&#8599; View Filing</a>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <div class="initials high">SATS</div>
+        <div>
+          <div class="company-name">SATS Ltd<span class="ticker">S58</span></div>
+          <div class="company-meta">Cash Dividend Declaration &middot; <span class="time">19:53 SGT</span></div>
+        </div>
+        <span class="badge high">High</span>
+      </div>
+      <div class="title">Mandatory Cash Dividend &mdash; Final FY2026: SGD 0.05 per share</div>
+      <div class="summary">
+        SATS declared a <strong>final dividend of SGD 0.05 per share</strong> (tax-exempt one-tier) for the year ended 31 March 2026, a 43% increase on the prior-year final of 3.5 cents. Combined with the 2.0-cent interim already paid, the full-year payout is 7.0 cents (vs 5.0 cents prior year), in line with the improved earnings and operating leverage reported in the same filing batch. Ex-dividend date is 22 July 2026; record date 23 July 2026; payment 6 August 2026 subject to shareholder approval at the 53rd AGM. The Transfer Books and Register close 24 July 2026.
+      </div>
+      <table class="key-table">
+        <tr><th>Dividend per share</th><td>SGD 0.05 (final, tax-exempt one-tier)</td></tr>
+        <tr><th>Total FY26 dividend</th><td>7.0 cents (interim 2.0 + final 5.0)</td></tr>
+        <tr><th>Prior year (FY25) total</th><td>5.0 cents</td></tr>
+        <tr><th>Ex-date / Record date</th><td>22 Jul 2026 / 23 Jul 2026</td></tr>
+        <tr><th>Pay date</th><td>6 Aug 2026 (subject to AGM approval)</td></tr>
+      </table>
+      <a class="view-btn" href="https://links.sgx.com/1.0.0/corporate-announcements/72QEMO4OJ3EUTHZD/89411ad7774a687962597ae8408318f7b4ead0df38db3fc236ad68668d4107e5" target="_blank" rel="noopener">&#8599; View Filing</a>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <div class="initials high">FLCT</div>
+        <div>
+          <div class="company-name">Frasers Logistics &amp; Commercial Trust<span class="ticker">BUOU</span></div>
+          <div class="company-meta">Asset Acquisition (Cross-border) &middot; <span class="time">21:35 SGT</span></div>
+        </div>
+        <span class="badge high">High</span>
+      </div>
+      <div class="title">Proposed Acquisition of Interests in Four Logistics Properties in Germany and the Netherlands</div>
+      <div class="summary">
+        FLCT, through its European holding company FLT Europe B.V., entered conditional share-purchase agreements on 25 May 2026 to acquire interests in <strong>four European logistics property holding companies</strong> &mdash; two properties in Germany and two in the Netherlands. The main SPA is with Frasers Property Investments (Europe) and FPE11 (related-party vendors); a second SPA with unrelated Stichting Coeval acquires a 6.0% minority stake in one of the Property Companies. The transaction expands FLCT's European logistics portfolio. The full announcement (with valuation, financing structure, and unitholder approval requirements) and presentation slides are attached to the filing. The deal involves related-party elements and will require an EGM and Stapled Securityholder approval per SGX Listing Manual.
+      </div>
+      <a class="view-btn" href="https://links.sgx.com/1.0.0/corporate-announcements/OJ1U0G1ONXI5MFVR/bfb5283fd8efaf7573bbf6ec5bc65a181fa18091a1c179c29ea807dcec22d516" target="_blank" rel="noopener">&#8599; View Filing</a>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <div class="initials high">CICT</div>
+        <div>
+          <div class="company-name">CapitaLand Integrated Commercial Trust<span class="ticker">C38U</span></div>
+          <div class="company-meta">EGM Notice + Circular &middot; <span class="time">14:29 SGT</span></div>
+        </div>
+        <span class="badge high">High</span>
+      </div>
+      <div class="title">Extraordinary General Meeting &mdash; Notice and Circular Issued</div>
+      <div class="summary">
+        CICT issued the substantive EGM package: Notice of EGM, Proxy Form, Circular to Unitholders, presentation slides and a related announcement. The EGM is convened for <strong>10 June 2026, 10:00am</strong> at Raffles City Convention Centre, Level 4 (Padang &amp; Collyer Ballroom). Response deadline: 8 June 2026 10:00am. The full Circular (attached) sets out the proposed resolutions for unitholder approval &mdash; review the Circular for the specific proposals, financial implications and the Trustee/Manager rationale. CICT subsequently issued a replacement notice on 28 May 2026 to update the presentation slides only; the underlying proposal and meeting date are unchanged.
+      </div>
+      <table class="key-table">
+        <tr><th>EGM date</th><td>10 June 2026, 10:00am SGT</td></tr>
+        <tr><th>Venue</th><td>Raffles City Convention Centre, Level 4</td></tr>
+        <tr><th>Response deadline</th><td>8 June 2026, 10:00am SGT</td></tr>
+        <tr><th>Documents</th><td>Notice, Proxy Form, Circular, Presentation</td></tr>
+      </table>
+      <a class="view-btn" href="https://links.sgx.com/1.0.0/corporate-announcements/7NYWGFYELUN2TOB7/97908b67fba4149c0ff29b287abfb61ef3c9d3a103671fed665fc0995d0d8bda" target="_blank" rel="noopener">&#8599; View Filing</a>
+    </div>
+  </div>
+
+  <!-- ROUTINE -->
+  <div class="section">
+    <h2>&#128203; Routine announcements</h2>
+
+    <div class="card">
+      <div class="card-head">
+        <div class="initials">SGT</div>
+        <div>
+          <div class="company-name">Singapore Telecommunications<span class="ticker">Z74</span></div>
+          <div class="company-meta">Share Buy-Back (Programme) &middot; <span class="time">18:47 SGT</span></div>
+        </div>
+        <span class="badge routine">Routine</span>
+      </div>
+      <div class="title">Daily Share Buy-Back &mdash; S$2Bn Value Realisation Programme</div>
+      <div class="summary">
+        Singtel purchased 4,000,000 shares on 25 May 2026 at SGD 4.54&ndash;4.60 (total consideration SGD 18.32 million) under the S$2Bn Value Realisation programme. All shares cancelled; no treasury holding. Cumulative under the mandate (started 29 July 2025) now stands at 117.30 million shares, or 0.71% of issued shares ex-treasury. Post-purchase: 16,395,870,116 shares issued ex-treasury, 42,472,639 treasury. Routine daily disclosure under SGX rules; no implied change to capital plan.
+      </div>
+      <a class="view-btn" href="https://links.sgx.com/1.0.0/corporate-announcements/NZRDP4KH8ARLAXIJ/0d344d2d555a2397e3376dcba2a5490e130b8fd643d05d180d838d2a013578e8" target="_blank" rel="noopener">&#8599; View Filing</a>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <div class="initials">UOB</div>
+        <div>
+          <div class="company-name">United Overseas Bank<span class="ticker">U11</span></div>
+          <div class="company-meta">Share Buy-Back (Daily) &middot; <span class="time">19:51 SGT</span></div>
+        </div>
+        <span class="badge routine">Routine</span>
+      </div>
+      <div class="title">Daily Share Buy-Back Notice</div>
+      <div class="summary">
+        UOB purchased 73,600 shares on 25 May 2026 at SGD 37.86&ndash;38.10 for SGD 2.80 million. Of these, 36,800 cancelled and 36,800 held as treasury. Cumulative under the current mandate (started 17 April 2026) is 966,400 shares, or 0.058% of issued shares ex-treasury &mdash; well below the 82.68 million authorised limit. Post-purchase: 1,652,589,791 issued shares ex-treasury, 12,344,200 treasury. Routine daily compliance disclosure; consistent with prior days' run-rate.
+      </div>
+      <a class="view-btn" href="https://links.sgx.com/1.0.0/corporate-announcements/05XUPBIXG0WHSJ94/af64aaf70602ea572bd888fdc0812ed788e3feb33798503d2523e2cb8c6b3320" target="_blank" rel="noopener">&#8599; View Filing</a>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <div class="initials">KEP</div>
+        <div>
+          <div class="company-name">Keppel Ltd<span class="ticker">BN4</span></div>
+          <div class="company-meta">Share Buy-Back (Daily) &middot; <span class="time">17:26 SGT</span></div>
+        </div>
+        <span class="badge routine">Routine</span>
+      </div>
+      <div class="title">Daily Share Buy-Back Notice</div>
+      <div class="summary">
+        Keppel purchased 70,000 shares on 25 May 2026 at SGD 10.93&ndash;10.95 for SGD 767,034.84. All held as treasury (none cancelled). Cumulative under the current mandate (started 17 April 2026) is 6,970,000 shares (0.384% of issued ex-treasury) &mdash; under 8% of the 90.65 million authorised. Post-purchase: 1,805,963,961 issued ex-treasury, 14,593,806 treasury. Routine daily compliance disclosure; no change to capital plan.
+      </div>
+      <a class="view-btn" href="https://links.sgx.com/1.0.0/corporate-announcements/ZWBVPF6FLO5B11FY/15a30a5d38de60b96f28167a48dcf59a2b33c023f7cdea6cea8ebe231e7e57bb" target="_blank" rel="noopener">&#8599; View Filing</a>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <div class="initials">OCBC</div>
+        <div>
+          <div class="company-name">Oversea-Chinese Banking Corp<span class="ticker">O39</span></div>
+          <div class="company-meta">Employee Share Scheme &middot; <span class="time">17:42 SGT</span></div>
+        </div>
+        <span class="badge routine">Routine</span>
+      </div>
+      <div class="title">Employee Stock Option / Share Scheme: Notice of Use of Treasury Shares</div>
+      <div class="summary">
+        OCBC filed a Notice of Use of Treasury Shares for its employee share schemes (PDF attached, 112K). Routine administrative disclosure that treasury shares were released to satisfy vesting or exercise events under staff equity plans. Not a market acquisition; total issued share count unchanged, only the treasury-share balance adjusted. Standard transparency disclosure under SGX rules; immaterial to the broader equity story. Specific share counts and plan attribution are in the attached PDF.
+      </div>
+      <a class="view-btn" href="https://links.sgx.com/1.0.0/corporate-announcements/2ON8XAUPD4W6KIDB/5bbf5df3127d6f69c0505ac4148227a2cf0a26bee7216c21d147de45ce12f48e" target="_blank" rel="noopener">&#8599; View Filing</a>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <div class="initials">YZJ</div>
+        <div>
+          <div class="company-name">Yangzijiang Shipbuilding<span class="ticker">BS6</span></div>
+          <div class="company-meta">AGM Minutes &middot; <span class="time">19:01 SGT</span></div>
+        </div>
+        <span class="badge routine">Routine</span>
+      </div>
+      <div class="title">Minutes of Annual General Meeting held on 28 April 2026</div>
+      <div class="summary">
+        Yangzijiang Shipbuilding filed the minutes of its Annual General Meeting held on 28 April 2026 (PDF, 302K), submitted by Executive Chairman and CEO Ren Letian. Routine post-AGM compliance filing capturing the proceedings, resolutions tabled and voting outcomes. Detail of director re-elections, auditor re-appointment, share buy-back mandate renewal and any special business is in the attached PDF. No new strategic disclosures expected from this filing on its own.
+      </div>
+      <a class="view-btn" href="https://links.sgx.com/1.0.0/corporate-announcements/N6BSTQY4WEYBKA8L/ad553e6442f72b2cc108c22c1732803d10ac4069750b981c9ee44f6d9579b14e" target="_blank" rel="noopener">&#8599; View Filing</a>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <div class="initials">UOL</div>
+        <div>
+          <div class="company-name">UOL Group<span class="ticker">U14</span></div>
+          <div class="company-meta">AGM Minutes &middot; <span class="time">17:30 SGT</span></div>
+        </div>
+        <span class="badge routine">Routine</span>
+      </div>
+      <div class="title">Minutes of the 63rd Annual General Meeting held on 27 April 2026</div>
+      <div class="summary">
+        UOL Group filed minutes of its 63rd AGM held on 27 April 2026 (PDF, 179K). Routine post-AGM compliance filing. Detail of director re-elections, auditor reappointment, share buy-back mandate, dividend approval and any other resolutions is in the attached PDF. Related announcements made on 2 April, 21 April and 27 April 2026 (referenced as SG260402MEETYPSV under "Annual General Meeting" category) provide the lead-up notices. No new strategic disclosures expected from this filing alone.
+      </div>
+      <a class="view-btn" href="https://links.sgx.com/1.0.0/corporate-announcements/IVTPWUH2PYSJD25C/ec07c7df6e8b91d98f2753ca1ccadd2e9fd8d2b78d17c9ccfadd2de977587aab" target="_blank" rel="noopener">&#8599; View Filing</a>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <div class="initials">SCI</div>
+        <div>
+          <div class="company-name">Sembcorp Industries<span class="ticker">U96</span></div>
+          <div class="company-meta">AGM Minutes &middot; <span class="time">17:20 SGT</span></div>
+        </div>
+        <span class="badge routine">Routine</span>
+      </div>
+      <div class="title">Minutes of the Twenty-Eighth Annual General Meeting</div>
+      <div class="summary">
+        Sembcorp Industries filed minutes of its 28th AGM (PDF, 312K). Routine post-AGM compliance filing capturing the proceedings, resolutions tabled and voting outcomes. Detail of director re-elections, auditor re-appointment, share buy-back mandate renewal and any special business (e.g. share issue mandate, employee share scheme) is in the attached PDF. No new strategic disclosures expected from this filing alone; refer to attached minutes for the specific resolution outcomes.
+      </div>
+      <a class="view-btn" href="https://links.sgx.com/1.0.0/corporate-announcements/EPX5TSYKQGIQ1PA8/252b4057d04219eddd7f44907dc0af12a4a0697325838310a40cfa1a4d660892" target="_blank" rel="noopener">&#8599; View Filing</a>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <div class="initials">VEN</div>
+        <div>
+          <div class="company-name">Venture Corporation<span class="ticker">V03</span></div>
+          <div class="company-meta">Employee Share Scheme &middot; <span class="time">17:25 SGT</span></div>
+        </div>
+        <span class="badge routine">Routine</span>
+      </div>
+      <div class="title">Issue &amp; Allotment of Shares Pursuant to Exercise of Options under the Executives Share Option Scheme</div>
+      <div class="summary">
+        Venture Corporation issued and allotted new shares to satisfy option exercises under its Executives' Share Option Scheme (PDF, 130K). Routine administrative disclosure recording the increase in issued share capital from option exercises by management-grade employees. Specific share counts, exercise prices and resulting new share total are in the attached PDF. Not market-moving on its own; the share increase from option exercises is typically immaterial to the overall capital base.
+      </div>
+      <a class="view-btn" href="https://links.sgx.com/1.0.0/corporate-announcements/R8N1BYJRHPSZT6I2/ecb020c2987107a0c0066ca6b6b87ba6fdb25a8774fbbe7c539cc4580c2fdee5" target="_blank" rel="noopener">&#8599; View Filing</a>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <div class="initials">SATS</div>
+        <div>
+          <div class="company-name">SATS Ltd<span class="ticker">S58</span></div>
+          <div class="company-meta">Rule 706A Half-Year Disclosure &middot; <span class="time">19:54 SGT</span></div>
+        </div>
+        <span class="badge routine">Routine</span>
+      </div>
+      <div class="title">Asset Acquisitions and Disposals: Announcement Pursuant to Rule 706A</div>
+      <div class="summary">
+        SATS filed its required Rule 706A summary of immaterial acquisitions and disposals during 2H FY2026. Key items: <strong>acquisition</strong> of 100% of Aviapartner Cargo NV (Brussels Airport cargo handling) for an adjusted EUR 4.02 million (~SGD 5.98 million), renamed WFS Cargo NV; <strong>disposal</strong> of 49% in dormant Ireland-incorporated Aviserv Limited for US$10 (nominal); and <strong>TFK Corporation</strong> Japan share buyback which lifted SATS' voting rights in TFK from 50.7% to 89.8% (share count unchanged). All transactions individually immaterial and treated as compliance disclosure rather than strategic news; the same items are reflected in note 10 of the FY26 full-year results.
+      </div>
+      <a class="view-btn" href="https://links.sgx.com/1.0.0/corporate-announcements/T02IHR54PPESTJAR/4169dddce7866b8b4065c585ea22b457375c511c9cf0787f3a142c50d9679a66" target="_blank" rel="noopener">&#8599; View Filing</a>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <div class="initials">CDL</div>
+        <div>
+          <div class="company-name">City Developments Limited<span class="ticker">C09</span></div>
+          <div class="company-meta">Subsidiary Disclosure &middot; <span class="time">17:17 SGT</span></div>
+        </div>
+        <span class="badge routine">Routine</span>
+      </div>
+      <div class="title">General Announcement: Audited FY2025 Financials of Subsidiary Grand Plaza Hotel Corporation</div>
+      <div class="summary">
+        CDL forwarded the audited financial statements for the year ended 31 December 2025 of its Philippine subsidiary Grand Plaza Hotel Corporation, submitted to the Securities and Exchange Commission of the Philippines on 25 May 2026 (PDF, 11.9 MB). This is a transparency disclosure of a listed subsidiary's separate filings &mdash; not a CDL group-level result. The detail is in the attached audited Filipino-format accounts. Routine for CDL itself; immaterial to the parent's equity story unless the subsidiary numbers diverge materially from prior years.
+      </div>
+      <a class="view-btn" href="https://links.sgx.com/1.0.0/corporate-announcements/RLVTK5ZXFHTKTBSU/73136b099fc89cbf8da3f6aa5b11ded38ec8b4eb8d127346fc016f0f93e4b1a0" target="_blank" rel="noopener">&#8599; View Filing</a>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <div class="initials">TBV</div>
+        <div>
+          <div class="company-name">Thai Beverage Public Co Ltd<span class="ticker">Y92</span></div>
+          <div class="company-meta">Director / Substantial Shareholder Disclosures (5 filings) &middot; <span class="time">17:57&ndash;17:59 SGT</span></div>
+        </div>
+        <span class="badge routine">Routine</span>
+      </div>
+      <div class="title">Five Related Disclosures of Changes in Interest (Director/CEO and Substantial Shareholder)</div>
+      <div class="summary">
+        ThaiBev filed five related disclosure notices in the same time window, covering changes in interest of Director / CEO Mr. Panote (Form 1) and substantial shareholder Siriwana (Form 3 &mdash; multiple Form 3 variants). These are routine SGX-required disclosures of changes in beneficial interest among insiders/major holders, typically reflecting administrative share transfers or vehicle reorganisations rather than open-market trading. Specific share counts and direct/deemed interest movements are in the attached Form 1 / Form 3 PDFs. Multiple parallel filings on the same day usually indicate a single underlying corporate-vehicle restructuring being reported across affected parties. Not market-moving on its own.
+      </div>
+      <a class="view-btn" href="https://links.sgx.com/1.0.0/corporate-announcements/GF893A3HBGQMU3Y9/ec150ac90f65d63ac04c95ea035800f36e3bd5b36c323cfc0e7e8f88016f6d8f" target="_blank" rel="noopener">&#8599; View First Filing (Form 1, Mr. Panote)</a>
+    </div>
+  </div>
+
+  <!-- NO FILING -->
+  <div class="section">
+    <h2>&#128276; No filing today (16 of 30 STI 30)</h2>
+    <div class="card">
+      <div class="chips">
+        <span class="chip"><span class="ticker-inline">D05</span>DBS Group</span>
+        <span class="chip"><span class="ticker-inline">C6L</span>Singapore Airlines</span>
+        <span class="chip"><span class="ticker-inline">S63</span>ST Engineering</span>
+        <span class="chip"><span class="ticker-inline">S68</span>SGX Group</span>
+        <span class="chip"><span class="ticker-inline">A17U</span>CapitaLand Ascendas REIT</span>
+        <span class="chip"><span class="ticker-inline">9CI</span>CapitaLand Investment</span>
+        <span class="chip"><span class="ticker-inline">N2IU</span>Mapletree Pan Asia Commercial Trust</span>
+        <span class="chip"><span class="ticker-inline">ME8U</span>Mapletree Industrial Trust</span>
+        <span class="chip"><span class="ticker-inline">M44U</span>Mapletree Logistics Trust</span>
+        <span class="chip"><span class="ticker-inline">AJBU</span>Keppel DC REIT</span>
+        <span class="chip"><span class="ticker-inline">J69U</span>Frasers Centrepoint Trust</span>
+        <span class="chip"><span class="ticker-inline">F34</span>Wilmar International</span>
+        <span class="chip"><span class="ticker-inline">G13</span>Genting Singapore</span>
+        <span class="chip"><span class="ticker-inline">5E2</span>Seatrium</span>
+        <span class="chip"><span class="ticker-inline">H78</span>Hongkong Land</span>
+        <span class="chip"><span class="ticker-inline">D01</span>DFI Retail Group</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    Compiled 2026-05-25 &middot; Source: <a href="https://www.sgx.com/securities/company-announcements" target="_blank" rel="noopener">SGX Company Announcements</a><br>
+    142 total SGX filings on 25 May 2026; 20 from 14 STI 30 constituents (47% coverage). Index composition should be verified against the latest STI 30 list.
+  </div>
+
+</div>
+</body>
+</html>

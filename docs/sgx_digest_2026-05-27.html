@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SGX STI 30 Digest — 27 May 2026</title>
+<style>
+  :root {
+    --sgx-red: #C8102E;
+    --sgx-navy: #1A2B4A;
+    --sgx-gold: #D4A017;
+    --sgx-light: #F4F6FA;
+    --sgx-border: #DDE3EE;
+    --text-primary: #1A2B4A;
+    --text-secondary: #5A6A85;
+    --high-bg: #FFF5F5;
+    --high-border: #C8102E;
+    --routine-bg: #F0F4FF;
+    --routine-border: #3A5DB5;
+    --none-bg: #F8F9FB;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--sgx-light);
+    color: var(--text-primary);
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  /* ── Header ── */
+  .header {
+    background: var(--sgx-navy);
+    color: white;
+    padding: 28px 40px 24px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .header-left { flex: 1; min-width: 260px; }
+  .header-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+  }
+  .logo-badge {
+    background: var(--sgx-red);
+    color: white;
+    font-weight: 800;
+    font-size: 18px;
+    letter-spacing: 0.5px;
+    padding: 6px 12px;
+    border-radius: 4px;
+  }
+  .header-title {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+    margin-bottom: 4px;
+  }
+  .header-sub {
+    font-size: 13px;
+    color: rgba(255,255,255,0.65);
+  }
+  .header-stats {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    align-items: flex-end;
+  }
+  .stat-card {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 8px;
+    padding: 12px 20px;
+    text-align: center;
+    min-width: 90px;
+  }
+  .stat-number {
+    font-size: 28px;
+    font-weight: 800;
+    color: #fff;
+    line-height: 1.1;
+  }
+  .stat-label {
+    font-size: 11px;
+    color: rgba(255,255,255,0.6);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 2px;
+  }
+
+  /* ── Main content ── */
+  .container { max-width: 960px; margin: 0 auto; padding: 32px 24px 60px; }
+
+  /* ── Section headers ── */
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+    margin-top: 32px;
+  }
+  .section-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  .section-icon.high { background: #FDE8EB; }
+  .section-icon.routine { background: #E8EFFE; }
+  .section-icon.none-today { background: #EFF1F5; }
+  .section-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+  .section-count {
+    margin-left: auto;
+    font-size: 12px;
+    color: var(--text-secondary);
+    font-weight: 500;
+  }
+  .section-divider {
+    border: none;
+    border-top: 2px solid var(--sgx-border);
+    margin-bottom: 16px;
+  }
+
+  /* ── Priority badge ── */
+  .badge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .badge-high { background: #FDDDE0; color: var(--sgx-red); }
+  .badge-routine { background: #DDE8FF; color: #2B4DB3; }
+  .badge-none { background: #E8EBF0; color: #6B7A99; }
+
+  /* ── Empty state card ── */
+  .empty-card {
+    background: white;
+    border: 1px solid var(--sgx-border);
+    border-radius: 10px;
+    padding: 24px;
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 13px;
+  }
+  .empty-card .empty-icon { font-size: 28px; margin-bottom: 8px; }
+
+  /* ── Announcement card ── */
+  .ann-card {
+    background: white;
+    border: 1px solid var(--sgx-border);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+  }
+  .ann-card-header {
+    padding: 16px 20px 14px;
+    border-bottom: 1px solid var(--sgx-border);
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .ann-company {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .company-logo-circle {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: var(--sgx-navy);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    flex-shrink: 0;
+  }
+  .company-name { font-size: 16px; font-weight: 700; color: var(--text-primary); }
+  .company-code {
+    font-size: 12px;
+    color: var(--text-secondary);
+    font-weight: 500;
+    margin-top: 2px;
+  }
+  .ann-meta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--text-secondary);
+    flex-shrink: 0;
+  }
+  .ann-time {
+    font-weight: 600;
+    color: var(--text-primary);
+    font-size: 13px;
+  }
+
+  .ann-card-body { padding: 18px 20px; }
+  .ann-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 12px;
+    line-height: 1.4;
+  }
+  .ann-summary {
+    font-size: 13.5px;
+    color: #374151;
+    line-height: 1.65;
+    margin-bottom: 16px;
+  }
+  .ann-card-footer {
+    padding: 12px 20px;
+    background: var(--sgx-light);
+    border-top: 1px solid var(--sgx-border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .ann-type-tag {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--text-secondary);
+  }
+  .ann-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    background: var(--sgx-navy);
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    transition: background 0.15s;
+  }
+  .ann-link:hover { background: #243d6b; }
+
+  /* ── Key figures table ── */
+  .figures-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin-bottom: 4px;
+  }
+  .figures-table th {
+    background: var(--sgx-light);
+    color: var(--text-secondary);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    padding: 7px 12px;
+    text-align: left;
+    border-bottom: 1px solid var(--sgx-border);
+  }
+  .figures-table td {
+    padding: 8px 12px;
+    border-bottom: 1px solid #EEF1F7;
+    color: var(--text-primary);
+  }
+  .figures-table tr:last-child td { border-bottom: none; }
+  .figures-table td.num { font-weight: 600; font-family: 'SF Mono', Consolas, monospace; }
+
+  /* ── No-filing grid ── */
+  .no-filing-card {
+    background: white;
+    border: 1px solid var(--sgx-border);
+    border-radius: 10px;
+    padding: 20px;
+  }
+  .no-filing-intro {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-bottom: 14px;
+  }
+  .ticker-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .ticker-chip {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--sgx-light);
+    border: 1px solid var(--sgx-border);
+    border-radius: 6px;
+    padding: 5px 10px;
+    font-size: 12px;
+  }
+  .ticker-code {
+    font-weight: 700;
+    color: var(--sgx-navy);
+    font-family: 'SF Mono', Consolas, monospace;
+    font-size: 11px;
+  }
+  .ticker-name { color: var(--text-secondary); }
+
+  /* ── Coverage bar ── */
+  .coverage-bar-wrap {
+    background: white;
+    border: 1px solid var(--sgx-border);
+    border-radius: 10px;
+    padding: 18px 20px;
+    margin-bottom: 20px;
+  }
+  .coverage-label {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+  }
+  .bar-track {
+    height: 8px;
+    background: var(--sgx-border);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 6px;
+  }
+  .bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    background: var(--sgx-red);
+    transition: width 0.6s ease;
+  }
+  .bar-sub {
+    font-size: 12px;
+    color: var(--text-secondary);
+    display: flex;
+    justify-content: space-between;
+  }
+
+  /* ── Footer ── */
+  .digest-footer {
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid var(--sgx-border);
+    font-size: 12px;
+    color: var(--text-secondary);
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════════ HEADER ══════════════ -->
+<div class="header">
+  <div class="header-left">
+    <div class="header-logo">
+      <div class="logo-badge">SGX</div>
+      <span style="color:rgba(255,255,255,0.5);font-size:13px;">STI 30 Watch</span>
+    </div>
+    <div class="header-title">Company Announcement Digest</div>
+    <div class="header-sub">Wednesday, 27 May 2026 &nbsp;·&nbsp; Straits Times Index 30 Constituents &nbsp;·&nbsp; Full Day (SGT)</div>
+  </div>
+  <div class="header-stats">
+    <div class="stat-card">
+      <div class="stat-number">1</div>
+      <div class="stat-label">STI 30 Filings</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">1</div>
+      <div class="stat-label">Companies</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">0</div>
+      <div class="stat-label">High Priority</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">22</div>
+      <div class="stat-label">Total SGX Filings</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ MAIN ══════════════ -->
+<div class="container">
+
+  <!-- Coverage bar -->
+  <div class="coverage-bar-wrap">
+    <div class="coverage-label">STI 30 Coverage Today</div>
+    <div class="bar-track">
+      <div class="bar-fill" style="width: 3.3%"></div>
+    </div>
+    <div class="bar-sub">
+      <span>1 of 30 constituents filed</span>
+      <span style="font-weight:600;color:var(--text-primary);">3.3%</span>
+    </div>
+  </div>
+
+  <!-- ── HIGH PRIORITY ── -->
+  <div class="section-header">
+    <div class="section-icon high">🚨</div>
+    <div>
+      <div class="section-title">High Priority</div>
+    </div>
+    <div class="section-count">0 announcements</div>
+  </div>
+  <hr class="section-divider">
+
+  <div class="empty-card">
+    <div class="empty-icon">✅</div>
+    No high-priority filings from STI 30 companies today — no results, profit warnings, M&amp;A, CEO changes, or rights issues.
+  </div>
+
+  <!-- ── ROUTINE ── -->
+  <div class="section-header">
+    <div class="section-icon routine">📋</div>
+    <div>
+      <div class="section-title">Routine</div>
+    </div>
+    <div class="section-count">1 announcement</div>
+  </div>
+  <hr class="section-divider">
+
+  <!-- Jardine Matheson card -->
+  <div class="ann-card">
+    <div class="ann-card-header">
+      <div class="ann-company">
+        <div class="company-logo-circle">JM</div>
+        <div>
+          <div class="company-name">Jardine Matheson Holdings</div>
+          <div class="company-code">SGX: J36 &nbsp;·&nbsp; ISIN: BMG507361001</div>
+        </div>
+      </div>
+      <div class="ann-meta">
+        <span class="badge badge-routine">Routine</span>
+        <span class="ann-time">05:34 PM SGT</span>
+        <span>27 May 2026</span>
+      </div>
+    </div>
+
+    <div class="ann-card-body">
+      <div class="ann-title">General Announcement :: Director's Share Transactions</div>
+
+      <div class="ann-summary">
+        Director Lincoln Pan acquired 43,000 Jardine Matheson ordinary shares on 26 May 2026 in two equal tranches of 21,500 shares — at US$67.91 and US$68.28 respectively — for a combined consideration of approximately <strong>US$2.93 million</strong>. Both transactions were executed on the Singapore Exchange. The notification is filed under UK Financial Conduct Authority rules governing disclosures by persons discharging managerial responsibilities (PDMRs). The open-market purchase at prevailing prices is a mild positive signal of director confidence. No change to operational guidance, dividend policy, or financial position is indicated by this filing.
+      </div>
+
+      <!-- Key figures -->
+      <table class="figures-table">
+        <thead>
+          <tr>
+            <th>Tranche</th>
+            <th>Shares</th>
+            <th>Price (US$)</th>
+            <th>Consideration (US$)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Tranche 1 — 26 May 2026</td>
+            <td class="num">21,500</td>
+            <td class="num">67.911</td>
+            <td class="num">1,460,087</td>
+          </tr>
+          <tr>
+            <td>Tranche 2 — 26 May 2026</td>
+            <td class="num">21,500</td>
+            <td class="num">68.279</td>
+            <td class="num">1,467,999</td>
+          </tr>
+          <tr style="background:#F4F6FA;font-weight:700;">
+            <td>Total</td>
+            <td class="num">43,000</td>
+            <td class="num">—</td>
+            <td class="num">2,928,085</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="ann-card-footer">
+      <div class="ann-type-tag">
+        <span>📁</span>
+        <span>Director Dealing &nbsp;·&nbsp; Filed by: Sean Ward, Company Secretary</span>
+      </div>
+      <a class="ann-link" href="https://links.sgx.com/FileOpen/JMH.ashx?App=Announcement&FileID=890498" target="_blank">
+        ↗ View Filing (PDF)
+      </a>
+    </div>
+  </div>
+
+  <!-- ── NO FILING TODAY ── -->
+  <div class="section-header" style="margin-top:36px;">
+    <div class="section-icon none-today">🔕</div>
+    <div>
+      <div class="section-title">No Filing Today</div>
+    </div>
+    <div class="section-count">29 of 30 constituents</div>
+  </div>
+  <hr class="section-divider">
+
+  <div class="no-filing-card">
+    <div class="no-filing-intro">The following STI 30 companies had no announcements on SGX on 27 May 2026.</div>
+    <div class="ticker-grid">
+      <div class="ticker-chip"><span class="ticker-code">D05</span><span class="ticker-name">DBS Group</span></div>
+      <div class="ticker-chip"><span class="ticker-code">O39</span><span class="ticker-name">OCBC Bank</span></div>
+      <div class="ticker-chip"><span class="ticker-code">U11</span><span class="ticker-name">UOB</span></div>
+      <div class="ticker-chip"><span class="ticker-code">Z74</span><span class="ticker-name">Singtel</span></div>
+      <div class="ticker-chip"><span class="ticker-code">C6L</span><span class="ticker-name">Singapore Airlines</span></div>
+      <div class="ticker-chip"><span class="ticker-code">S63</span><span class="ticker-name">ST Engineering</span></div>
+      <div class="ticker-chip"><span class="ticker-code">BN4</span><span class="ticker-name">Keppel</span></div>
+      <div class="ticker-chip"><span class="ticker-code">U96</span><span class="ticker-name">Sembcorp Industries</span></div>
+      <div class="ticker-chip"><span class="ticker-code">S68</span><span class="ticker-name">SGX Group</span></div>
+      <div class="ticker-chip"><span class="ticker-code">C38U</span><span class="ticker-name">CapitaLand INCT</span></div>
+      <div class="ticker-chip"><span class="ticker-code">A17U</span><span class="ticker-name">CapitaLand Ascendas REIT</span></div>
+      <div class="ticker-chip"><span class="ticker-code">9CI</span><span class="ticker-name">CapitaLand Investment</span></div>
+      <div class="ticker-chip"><span class="ticker-code">N2IU</span><span class="ticker-name">Mapletree Pan Asia CT</span></div>
+      <div class="ticker-chip"><span class="ticker-code">ME8U</span><span class="ticker-name">Mapletree Industrial Trust</span></div>
+      <div class="ticker-chip"><span class="ticker-code">M44U</span><span class="ticker-name">Mapletree Logistics Trust</span></div>
+      <div class="ticker-chip"><span class="ticker-code">AJBU</span><span class="ticker-name">Keppel DC REIT</span></div>
+      <div class="ticker-chip"><span class="ticker-code">BUOU</span><span class="ticker-name">Frasers L&amp;C Trust</span></div>
+      <div class="ticker-chip"><span class="ticker-code">J69U</span><span class="ticker-name">Frasers Centrepoint Trust</span></div>
+      <div class="ticker-chip"><span class="ticker-code">F34</span><span class="ticker-name">Wilmar International</span></div>
+      <div class="ticker-chip"><span class="ticker-code">G13</span><span class="ticker-name">Genting Singapore</span></div>
+      <div class="ticker-chip"><span class="ticker-code">Y92</span><span class="ticker-name">Thai Beverage</span></div>
+      <div class="ticker-chip"><span class="ticker-code">BS6</span><span class="ticker-name">Yangzijiang Shipbuilding</span></div>
+      <div class="ticker-chip"><span class="ticker-code">V03</span><span class="ticker-name">Venture Corp</span></div>
+      <div class="ticker-chip"><span class="ticker-code">5E2</span><span class="ticker-name">Seatrium</span></div>
+      <div class="ticker-chip"><span class="ticker-code">C09</span><span class="ticker-name">City Developments</span></div>
+      <div class="ticker-chip"><span class="ticker-code">U14</span><span class="ticker-name">UOL Group</span></div>
+      <div class="ticker-chip"><span class="ticker-code">H78</span><span class="ticker-name">Hongkong Land</span></div>
+      <div class="ticker-chip"><span class="ticker-code">D01</span><span class="ticker-name">DFI Retail Group</span></div>
+      <div class="ticker-chip"><span class="ticker-code">S58</span><span class="ticker-name">SATS</span></div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="digest-footer">
+    <span>Compiled: 27 May 2026 &nbsp;·&nbsp; Source: SGX Company Announcements (live, api.sgx.com) &nbsp;·&nbsp; Period: 2026-05-27 00:00–23:59 SGT</span>
+    <span>STI 30 Watch — automated daily digest</span>
+  </div>
+
+</div>
+</body>
+</html>

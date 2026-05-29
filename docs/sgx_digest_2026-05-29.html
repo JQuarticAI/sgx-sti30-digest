@@ -16,9 +16,6 @@
     --routine-border: #2C5BB3;
     --text: #1A2B4A;
     --muted: #5A6781;
-    --warn-bg: #FFF6E1;
-    --warn-border: #E2A93B;
-    --warn-text: #6A4A0A;
   }
   * { box-sizing: border-box; }
   body {
@@ -64,28 +61,10 @@
   .coverage-bar { height: 8px; background: var(--sgx-light); border-radius: 4px; overflow: hidden; }
   .coverage-fill { height: 100%; background: linear-gradient(90deg, var(--sgx-red), #E2415C); }
 
-  .banner-offline {
-    margin-top: 22px;
-    background: var(--warn-bg);
-    border: 1px solid var(--warn-border);
-    border-left: 6px solid var(--warn-border);
-    color: var(--warn-text);
-    border-radius: 10px;
-    padding: 16px 20px;
-    font-size: 14px;
-    line-height: 1.6;
-  }
-  .banner-offline strong { color: #4F360A; }
-  .banner-offline a { color: var(--sgx-red); font-weight: 600; text-decoration: none; }
-
   .section { margin-top: 32px; }
   .section h2 {
     margin: 0 0 14px; font-size: 17px; font-weight: 700; color: var(--sgx-navy);
     display: flex; align-items: center; gap: 8px;
-  }
-  .section h2 .count {
-    background: var(--sgx-light); color: var(--sgx-navy);
-    font-size: 12px; padding: 2px 8px; border-radius: 999px; font-weight: 700;
   }
 
   .card {
@@ -93,119 +72,208 @@
     border-radius: 10px; padding: 18px 20px;
     box-shadow: 0 1px 3px rgba(26,43,74,0.05);
   }
-  .card.empty { text-align: center; color: var(--muted); font-style: italic; padding: 28px; }
+  .card + .card { margin-top: 14px; }
+  .card-head { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .initials {
+    width: 38px; height: 38px; flex: 0 0 38px; border-radius: 50%;
+    background: var(--sgx-navy); color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 13px; letter-spacing: 0.5px;
+  }
+  .initials.high { background: var(--sgx-red); }
+  .company-name { font-weight: 700; font-size: 15px; color: var(--sgx-navy); }
+  .company-meta { font-size: 12px; color: var(--muted); }
+  .ticker {
+    display: inline-block; background: var(--sgx-light); color: var(--sgx-navy);
+    padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 700;
+    margin-left: 6px;
+  }
+  .badge {
+    margin-left: auto; padding: 4px 10px; border-radius: 999px;
+    font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px;
+  }
+  .badge.high {
+    background: var(--high-bg); color: var(--high-border);
+    border: 1px solid rgba(200,16,46,0.25);
+  }
+  .badge.routine {
+    background: var(--routine-bg); color: var(--routine-border);
+    border: 1px solid rgba(44,91,179,0.25);
+  }
+  .time { font-size: 12px; color: var(--muted); margin-left: 8px; }
+  .title { margin: 12px 0 6px; font-size: 14px; font-weight: 600; color: var(--text); }
+  .summary { margin: 6px 0 12px; font-size: 14px; color: var(--text); }
+  .key-table {
+    width: 100%; border-collapse: collapse; margin: 10px 0 14px;
+    font-size: 13px;
+  }
+  .key-table th, .key-table td {
+    text-align: left; padding: 6px 10px;
+    border-bottom: 1px solid var(--sgx-border);
+  }
+  .key-table th { color: var(--muted); font-weight: 600; width: 40%; }
+  .view-btn {
+    display: inline-block; background: var(--sgx-navy); color: #fff;
+    padding: 7px 14px; border-radius: 6px;
+    font-size: 12px; font-weight: 600; text-decoration: none;
+  }
+  .view-btn:hover { background: #243a63; }
 
-  .chips {
-    display: flex; flex-wrap: wrap; gap: 8px;
-    background: #fff; border: 1px solid var(--sgx-border);
-    border-radius: 10px; padding: 14px 16px;
-  }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
   .chip {
-    background: var(--sgx-light); color: var(--sgx-navy);
-    padding: 4px 10px; border-radius: 999px; font-size: 12px; font-weight: 600;
-    border: 1px solid var(--sgx-border);
+    background: #fff; border: 1px solid var(--sgx-border);
+    border-radius: 999px; padding: 6px 12px;
+    font-size: 12px; color: var(--muted); white-space: nowrap;
   }
+  .chip .ticker-inline { color: var(--sgx-navy); font-weight: 700; margin-right: 6px; }
 
   .footer {
-    margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--sgx-border);
-    color: var(--muted); font-size: 12px; text-align: center; line-height: 1.7;
+    margin-top: 36px; padding-top: 18px;
+    border-top: 1px solid var(--sgx-border);
+    color: var(--muted); font-size: 12px;
+    text-align: center; line-height: 1.6;
   }
   .footer a { color: var(--sgx-red); text-decoration: none; }
-  .footer .disclaimer { margin-top: 6px; font-size: 11px; }
 
-  @media (max-width: 700px) {
+  @media (max-width: 640px) {
     .stats { grid-template-columns: repeat(2, 1fr); }
+    .header h1 { font-size: 18px; }
+    .badge { margin-left: 0; margin-top: 6px; }
   }
 </style>
 </head>
 <body>
 <div class="container">
 
-  <header class="header">
+  <div class="header">
     <div class="header-top">
       <span class="logo-badge">SGX</span>
       <div>
-        <h1>STI 30 Daily Digest &mdash; 2026-05-29</h1>
-        <div class="subtitle">Friday, 29 May 2026 &middot; Automated executive digest of SGX filings for the Straits Times Index constituents</div>
+        <h1>STI 30 Company Announcements Digest</h1>
+        <div class="subtitle">Friday, 29 May 2026 &middot; Daily executive digest</div>
       </div>
     </div>
+
     <div class="stats">
-      <div class="stat"><div class="label">STI 30 Filings</div><div class="value">&mdash;</div></div>
-      <div class="stat"><div class="label">Companies Filing</div><div class="value">&mdash;</div></div>
-      <div class="stat"><div class="label">High Priority</div><div class="value">&mdash;</div></div>
-      <div class="stat"><div class="label">Total SGX Filings</div><div class="value">&mdash;</div></div>
+      <div class="stat"><div class="label">STI 30 filings</div><div class="value">2</div></div>
+      <div class="stat"><div class="label">Companies filing</div><div class="value">2</div></div>
+      <div class="stat"><div class="label">High priority</div><div class="value">2</div></div>
+      <div class="stat"><div class="label">Total SGX filings</div><div class="value">12</div></div>
     </div>
-  </header>
+  </div>
 
   <div class="coverage">
-    <div class="coverage-label"><span>STI 30 coverage today</span><span>Unavailable</span></div>
-    <div class="coverage-bar"><div class="coverage-fill" style="width: 0%;"></div></div>
-  </div>
-
-  <div class="banner-offline">
-    &#9888;&#65039; <strong>Chrome extension offline &mdash; SGX page could not be rendered.</strong>
-    The SGX SPA (sgx.com/securities/company-announcements) failed to bootstrap its
-    <code>WIDGET-FILTER-LISTING-COMPANY-ANNOUNCEMENTS</code> component within the
-    patient wait window (~3 minutes), and no calls to the <code>api.sgx.com/announcements</code>
-    endpoint were observed. Today's filings could not be retrieved automatically.
-    Verify manually at
-    <a href="https://www.sgx.com/securities/company-announcements" target="_blank" rel="noopener">sgx.com/securities/company-announcements</a>
-    before acting on anything market-sensitive.
-  </div>
-
-  <section class="section">
-    <h2>High Priority <span class="count">0</span></h2>
-    <div class="card empty">No high-priority filings captured &mdash; data feed unavailable today. Confirm directly on SGX.</div>
-  </section>
-
-  <section class="section">
-    <h2>Routine <span class="count">0</span></h2>
-    <div class="card empty">No routine filings captured &mdash; data feed unavailable today.</div>
-  </section>
-
-  <section class="section">
-    <h2>No Filing Today (STI 30) <span class="count">30</span></h2>
-    <div class="chips">
-      <span class="chip">DBS (D05)</span>
-      <span class="chip">OCBC (O39)</span>
-      <span class="chip">UOB (U11)</span>
-      <span class="chip">Singtel (Z74)</span>
-      <span class="chip">SIA (C6L)</span>
-      <span class="chip">ST Engineering (S63)</span>
-      <span class="chip">Keppel (BN4)</span>
-      <span class="chip">Sembcorp Ind. (U96)</span>
-      <span class="chip">SGX Group (S68)</span>
-      <span class="chip">CICT (C38U)</span>
-      <span class="chip">CapLand Ascendas REIT (A17U)</span>
-      <span class="chip">CapitaLand Investment (9CI)</span>
-      <span class="chip">MPACT (N2IU)</span>
-      <span class="chip">Mapletree Industrial Trust (ME8U)</span>
-      <span class="chip">Mapletree Logistics Trust (M44U)</span>
-      <span class="chip">Keppel DC REIT (AJBU)</span>
-      <span class="chip">Frasers Logistics &amp; Commercial Trust (BUOU)</span>
-      <span class="chip">Frasers Centrepoint Trust (J69U)</span>
-      <span class="chip">Wilmar Int'l (F34)</span>
-      <span class="chip">Genting Singapore (G13)</span>
-      <span class="chip">Thai Beverage (Y92)</span>
-      <span class="chip">Yangzijiang Shipbuilding (BS6)</span>
-      <span class="chip">Venture Corp (V03)</span>
-      <span class="chip">Seatrium (5E2)</span>
-      <span class="chip">City Developments (C09)</span>
-      <span class="chip">UOL Group (U14)</span>
-      <span class="chip">Hongkong Land (H78)</span>
-      <span class="chip">DFI Retail (D01)</span>
-      <span class="chip">SATS (S58)</span>
-      <span class="chip">Jardine Matheson (J36)</span>
+    <div class="coverage-label">
+      <span>STI 30 coverage today</span>
+      <span>2 of 30 &mdash; 7%</span>
     </div>
-  </section>
+    <div class="coverage-bar"><div class="coverage-fill" style="width:7%;"></div></div>
+  </div>
 
-  <footer class="footer">
+  <!-- HIGH PRIORITY -->
+  <div class="section">
+    <h2>&#128680; High-priority announcements</h2>
+
+    <div class="card">
+      <div class="card-head">
+        <div class="initials high">KEP</div>
+        <div>
+          <div class="company-name">Keppel Ltd.<span class="ticker">BN4</span></div>
+          <div class="company-meta">Operational Milestone / Capacity Expansion &middot; <span class="time">07:30 SGT</span></div>
+        </div>
+        <span class="badge high">High</span>
+      </div>
+      <div class="title">General Announcement &mdash; Keppel Sakra Cogen Plant commences commercial operations</div>
+      <div class="summary">
+        Keppel's 600MW Keppel Sakra Cogen (KSC) Plant, Singapore's first hydrogen-compatible combined-cycle gas turbine, began commercial operations today, expanding Keppel's power capacity by about 45% to roughly 1,900MW (combined with Merlimau Cogen), supplemented by up to 200MW of imported low-carbon power. The plant is fully contracted for 2026 and 2027, bolstering recurring income. KSC is 70% owned by Keppel Asia Infrastructure Fund and 30% by Keppel, reflecting Keppel's asset-light manager-operator model. It can co-fire up to 30% hydrogen with natural gas at the onset and could reduce up to 220,000 tonnes of CO2 annually versus Singapore's grid average.
+      </div>
+      <table class="key-table">
+        <tr><th>Capacity</th><td>600MW CCGT &mdash; ~45% increase to Keppel's power capacity</td></tr>
+        <tr><th>Combined Keppel capacity</th><td>~1,900MW (with Merlimau) + up to 200MW imported</td></tr>
+        <tr><th>Ownership</th><td>70% Keppel Asia Infrastructure Fund / 30% Keppel</td></tr>
+        <tr><th>Contracted</th><td>Fully contracted for 2026 and 2027</td></tr>
+        <tr><th>Fuel flexibility</th><td>Up to 30% H2 co-firing at start; pathway to 100% H2</td></tr>
+        <tr><th>CO2 reduction</th><td>Up to 220,000 tonnes/year vs grid average</td></tr>
+      </table>
+      <a class="view-btn" href="https://links.sgx.com/1.0.0/corporate-announcements/6AIPUPMSZE9YQLWB/76c02919259020d8448d8c3d21af51cb0b8d268cfdcf229540476237d9cd8ff3" target="_blank" rel="noopener">&#8599; View Filing</a>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <div class="initials high">STM</div>
+        <div>
+          <div class="company-name">Seatrium Limited<span class="ticker">5E2</span></div>
+          <div class="company-meta">1Q2026 Business Update &middot; <span class="time">07:09 SGT</span></div>
+        </div>
+        <span class="badge high">High</span>
+      </div>
+      <div class="title">General Announcement &mdash; Seatrium Sustains Growth Momentum into 1Q2026</div>
+      <div class="summary">
+        Seatrium's 1Q2026 business update reports a net order book of S$15.5 billion across 24 projects with deliveries through 2033, steady project execution and on-track margin improvements driven by better project mix and lower overheads. It delivered TSHD Frederick Paup and WTIV Maersk Viridis, secured its 8th FSRU conversion (LNGT Karadeniz from Karpowership), and flagged a robust pipeline of more than S$28 billion over the next 24 months. Completed non-core divestments are expected to unlock more than S$50m in annualised cost savings and over S$330m in cash. In April 2026, Seatrium launched a S$3bn debt programme with an inaugural S$400m 2.95% 2031 senior unsecured note issue.
+      </div>
+      <table class="key-table">
+        <tr><th>Net order book</th><td>S$15.5 billion across 24 projects, deliveries to 2033</td></tr>
+        <tr><th>Gross order book</th><td>S$38.9 billion</td></tr>
+        <tr><th>Pipeline (24 months)</th><td>&gt; S$28 billion across O&amp;G, Offshore Wind, Conversions</td></tr>
+        <tr><th>Divestment outcome</th><td>&gt; S$50m annualised cost savings; &gt; S$330m cash</td></tr>
+        <tr><th>Recent issuance</th><td>S$400m 2.95% senior unsecured notes due 2031 (Apr 2026)</td></tr>
+        <tr><th>New 1Q26 order</th><td>FSRU conversion LNGT Karadeniz (Karpowership)</td></tr>
+      </table>
+      <a class="view-btn" href="https://links.sgx.com/1.0.0/corporate-announcements/NYZQJQ387FN4OJWM/0fe20f405b8848a85c3ecd75183214b2542f1fa33ddcfeaa6b5f3c720876543b" target="_blank" rel="noopener">&#8599; View Filing</a>
+    </div>
+
+  </div>
+
+  <!-- ROUTINE -->
+  <div class="section">
+    <h2>&#128221; Routine announcements</h2>
+    <div class="card">
+      <div class="summary" style="margin:0;color:var(--muted);">No routine STI 30 filings on the SGX feed today.</div>
+    </div>
+  </div>
+
+  <!-- NO FILING -->
+  <div class="section">
+    <h2>&#128196; No filing today (28 of 30)</h2>
+    <div class="chips">
+      <span class="chip"><span class="ticker-inline">D05</span>DBS Group</span>
+      <span class="chip"><span class="ticker-inline">O39</span>OCBC Bank</span>
+      <span class="chip"><span class="ticker-inline">U11</span>UOB</span>
+      <span class="chip"><span class="ticker-inline">Z74</span>Singtel</span>
+      <span class="chip"><span class="ticker-inline">C6L</span>Singapore Airlines</span>
+      <span class="chip"><span class="ticker-inline">S63</span>ST Engineering</span>
+      <span class="chip"><span class="ticker-inline">U96</span>Sembcorp Industries</span>
+      <span class="chip"><span class="ticker-inline">S68</span>SGX Group</span>
+      <span class="chip"><span class="ticker-inline">C38U</span>CICT</span>
+      <span class="chip"><span class="ticker-inline">A17U</span>CapitaLand Ascendas REIT</span>
+      <span class="chip"><span class="ticker-inline">9CI</span>CapitaLand Investment</span>
+      <span class="chip"><span class="ticker-inline">N2IU</span>Mapletree Pan Asia Comm Tr</span>
+      <span class="chip"><span class="ticker-inline">ME8U</span>Mapletree Industrial Tr</span>
+      <span class="chip"><span class="ticker-inline">M44U</span>Mapletree Logistics Tr</span>
+      <span class="chip"><span class="ticker-inline">AJBU</span>Keppel DC REIT</span>
+      <span class="chip"><span class="ticker-inline">BUOU</span>Frasers L&amp;C Trust</span>
+      <span class="chip"><span class="ticker-inline">J69U</span>Frasers Centrepoint Tr</span>
+      <span class="chip"><span class="ticker-inline">F34</span>Wilmar International</span>
+      <span class="chip"><span class="ticker-inline">G13</span>Genting Singapore</span>
+      <span class="chip"><span class="ticker-inline">Y92</span>Thai Beverage</span>
+      <span class="chip"><span class="ticker-inline">BS6</span>Yangzijiang Shipbuilding</span>
+      <span class="chip"><span class="ticker-inline">V03</span>Venture Corp</span>
+      <span class="chip"><span class="ticker-inline">C09</span>City Developments</span>
+      <span class="chip"><span class="ticker-inline">U14</span>UOL Group</span>
+      <span class="chip"><span class="ticker-inline">H78</span>Hongkong Land</span>
+      <span class="chip"><span class="ticker-inline">D01</span>DFI Retail Group</span>
+      <span class="chip"><span class="ticker-inline">S58</span>SATS</span>
+      <span class="chip"><span class="ticker-inline">J36</span>Jardine Matheson</span>
+    </div>
+  </div>
+
+  <div class="footer">
     Maintained by <strong>JQuarticAI</strong>. Generated using Anthropic's Claude.<br>
-    <a href="https://github.com/JQuarticAI/sgx-sti30-digest" target="_blank" rel="noopener">Source on GitHub</a>
-    &middot;
-    <a href="https://www.sgx.com/securities/company-announcements" target="_blank" rel="noopener">SGX Announcements</a>
-    <div class="disclaimer">Summaries are AI-generated and not financial advice. See the <a href="https://github.com/JQuarticAI/sgx-sti30-digest#disclaimer" target="_blank" rel="noopener">full disclaimer</a>.</div>
-  </footer>
+    Source: <a href="https://www.sgx.com/securities/company-announcements" target="_blank" rel="noopener">SGX Company Announcements</a> &middot;
+    <a href="https://github.com/JQuarticAI/sgx-sti30-digest" target="_blank" rel="noopener">GitHub</a><br>
+    <em>Summaries are AI-generated and not financial advice.</em>
+  </div>
+
 </div>
 </body>
 </html>
